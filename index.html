@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>正品验证</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            background: #ffffff;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        /* 主标题 —— 全大写，加粗，绿色调表示正品 */
+        .main-title {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #16a34a;
+            margin-bottom: 16px;
+        }
+        /* 防伪码显示区 —— 带括号，灰底，等宽字体 */
+        .code-wrapper {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            font-family: 'Courier New', Courier, monospace;
+            background: #f0fdf4;
+            padding: 12px 28px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            border: 1px solid #bbf7d0;
+        }
+        /* 描述文字 —— 正向描述 */
+        .desc {
+            font-size: 15px;
+            color: #475569;
+            max-width: 320px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+        /* Contact Us 按钮（保留，可改链接） */
+        .contact-btn {
+            display: inline-block;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            padding: 12px 48px;
+            border-radius: 50px;
+            color: #334155;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .contact-btn:active {
+            background: #f1f5f9;
+            transform: scale(0.97);
+        }
+        .footer-note {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+        /* 错误状态（码长度不对时显示） */
+        .main-title.error { color: #dc2626; }
+        .code-wrapper.error { background: #fef2f2; border-color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+    <div class="main-title" id="mainTitle">✅ PRODUCT VERIFIED</div>
+    
+    <div class="code-wrapper" id="displayCode">(等待扫码)</div>
+    
+    <p class="desc" id="descText">This product is genuine. Thank you for your trust.</p>
+    
+    <a href="#" class="contact-btn">Contact Us</a>
+    
+    <div class="footer-note">Verification ID: <span id="footerId">--</span></div>
+
+    <script>
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            let code = params.get('code');
+            
+            const displayEl = document.getElementById('displayCode');
+            const footerEl = document.getElementById('footerId');
+            const titleEl = document.getElementById('mainTitle');
+            const descEl = document.getElementById('descText');
+
+            // 如果传入了code参数
+            if (code) {
+                // 过滤特殊字符，只保留数字和字母
+                code = code.replace(/[^a-zA-Z0-9]/g, '');
+                
+                // ★★★ 校验是否为10位 ★★★
+                if (code.length === 10) {
+                    // 正品 —— 显示绿色
+                    displayEl.textContent = `(${code})`;
+                    footerEl.textContent = code;
+                    titleEl.textContent = '✅ PRODUCT VERIFIED';
+                    titleEl.className = 'main-title';
+                    descEl.textContent = 'This product is genuine. Thank you for your trust.';
+                    displayEl.className = 'code-wrapper';
+                } else {
+                    // 长度不对（不是10位）—— 显示警告
+                    displayEl.textContent = `(${code})`;
+                    footerEl.textContent = code + ' (无效长度)';
+                    titleEl.textContent = '⚠️ INVALID CODE';
+                    titleEl.className = 'main-title error';
+                    descEl.textContent = 'The code length is incorrect. Please verify your QR code.';
+                    displayEl.className = 'code-wrapper error';
+                }
+            } else {
+                // 没有传入code参数
+                displayEl.textContent = '(No ID Scanned)';
+                footerEl.textContent = 'None';
+                titleEl.textContent = '⚠️ WAITING FOR SCAN';
+                titleEl.className = 'main-title error';
+                descEl.textContent = 'Please scan a valid QR code.';
+                displayEl.className = 'code-wrapper error';
+            }
+        })();
+    </script>
+</body>
+</html>
