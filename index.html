@@ -3,137 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AuthNow - Product Verification</title>
+    <title>AuthNow Verification</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
             background-color: #F2F2F7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
             -webkit-font-smoothing: antialiased;
         }
 
+        /* ✅ 移动端验证卡片 */
         .card {
-            background: #FFFFFF;
-            width: 100%;
-            max-width: 380px;
-            border-radius: 24px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            background: #FFF; width: 100%; max-width: 380px;
+            border-radius: 24px; padding: 40px 30px; text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08); position: relative;
         }
 
-        /* 顶部绿色对勾图标 */
-        .check-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 20px;
-        }
-        .check-icon circle { fill: #34C759; }
-        .check-icon path { stroke: #FFFFFF; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        /* Logo 样式 */
+        .logo { width: 120px; height: auto; margin-bottom: 24px; display: block; margin-left: auto; margin-right: auto; }
 
-        .product-name {
-            font-size: 22px;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 8px;
-            letter-spacing: -0.3px;
-        }
-
-        .auth-status {
-            font-size: 15px;
-            font-weight: 600;
-            color: #34C759;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 30px;
-        }
-
-        /* 验证码展示区域 - 还原截图样式 */
-        .code-container {
-            background: #F9F9FB;
-            border: 1px solid #E5E5EA;
-            border-radius: 12px;
-            padding: 18px 15px;
-            margin-bottom: 20px;
-        }
-
-        .code-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #8E8E93;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-
-        .code-value {
-            font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace;
-            font-size: 24px;
-            font-weight: 700;
-            color: #000000;
-            letter-spacing: 2px;
-            word-break: break-all;
-        }
-
-        .hint-text {
-            font-size: 13px;
-            line-height: 1.6;
-            color: #8E8E93;
-            padding: 0 5px;
-        }
-
-        /* 右上角 ENG 按钮还原 */
+        /* 右上角语言选择器 */
+        .lang-wrapper { position: absolute; top: 20px; right: 20px; z-index: 100; }
         .lang-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #007AFF;
-            cursor: pointer;
-            z-index: 10;
+            font-size: 14px; font-weight: 600; color: #007AFF; cursor: pointer;
+            display: flex; align-items: center; gap: 4px; user-select: none;
+        }
+        .lang-btn::after { content: '▾'; font-size: 10px; transition: transform 0.2s; }
+        .lang-wrapper.open .lang-btn::after { transform: rotate(180deg); }
+
+        .lang-dropdown {
+            position: absolute; top: calc(100% + 8px); right: 0;
+            background: #FFF; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); opacity: 0; visibility: hidden;
+            transform: translateY(-8px); transition: all 0.2s ease;
+            min-width: 80px;
+        }
+        .lang-wrapper.open .lang-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        
+        .lang-option {
+            padding: 12px 20px; font-size: 14px; font-weight: 500; color: #000;
+            cursor: pointer; white-space: nowrap; transition: background 0.15s;
+        }
+        .lang-option:hover, .lang-option:active { background: #F2F2F7; }
+        .lang-option.active { color: #007AFF; font-weight: 700; }
+
+        /* 验证内容样式 */
+        .check-icon { width: 64px; height: 64px; margin: 0 auto 20px; }
+        .check-icon circle { fill: #34C759; }
+        .check-icon path { stroke: #FFF; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        .product-name { font-size: 22px; font-weight: 700; color: #000; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .auth-status { font-size: 15px; font-weight: 600; color: #34C759; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 30px; }
+
+        .code-container { background: #F9F9FB; border: 1px solid #E5E5EA; border-radius: 12px; padding: 18px 15px; margin-bottom: 20px; }
+        .code-label { font-size: 12px; font-weight: 600; color: #8E8E93; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .code-value { font-family: "SF Mono", Menlo, monospace; font-size: 24px; font-weight: 700; color: #000; letter-spacing: 2px; word-break: break-all; }
+        .hint-text { font-size: 13px; line-height: 1.6; color: #8E8E93; padding: 0 5px; }
+
+        /* 🚫 PC端拦截 */
+        .desktop-block { display: none; text-align: center; max-width: 400px; }
+        .desktop-block svg { width: 80px; height: 80px; margin-bottom: 24px; opacity: 0.8; }
+        .desktop-block h2 { font-size: 20px; color: #000; margin-bottom: 12px; }
+        .desktop-block p { font-size: 15px; color: #8E8E93; line-height: 1.6; }
+
+        @media screen and (min-width: 768px) {
+            .card { display: none !important; }
+            .desktop-block { display: block !important; }
         }
     </style>
 </head>
 <body>
-    <div class="lang-btn">ENG ▾</div>
-    
-    <div class="card">
-        <!-- 绿色对勾 SVG -->
-        <svg class="check-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="32" cy="32" r="32"/>
-            <path d="M20 33 L28 41 L44 25"/>
-        </svg>
 
-        <div class="product-name">T.G. 15 mg</div>
-        <div class="auth-status">Authentic</div>
+    <!-- PC端拦截页 -->
+    <div class="desktop-block">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+        </svg>
+        <h2>Mobile Only Access</h2>
+        <p>Please scan the QR code directly with your smartphone camera to view the authentication result.</p>
+    </div>
+
+    <!-- 移动端验证页 -->
+    <div class="card">
+        <!-- ⬇️ 语言选择器 -->
+        <div class="lang-wrapper" id="langWrapper">
+            <div class="lang-btn" id="langBtn"><span id="currentLang">ENG</span></div>
+            <div class="lang-dropdown">
+                <div class="lang-option active" data-lang="en">ENG</div>
+                <div class="lang-option" data-lang="es">SPA</div>
+                <div class="lang-option" data-lang="pt">POR</div>
+            </div>
+        </div>
+
+        <!-- ⬇️ Logo：请替换 src 为你的真实 Logo 文件路径或 Base64 -->
+        <img class="logo" src="logo.png" alt="AuthNow Logo" onerror="this.style.display='none'">
+
+        <svg class="check-icon" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32"/><path d="M20 33 L28 41 L44 25"/></svg>
+        
+        <div class="product-name" data-i18n="productName">T.G. 15 mg</div>
+        <div class="auth-status" data-i18n="status">Authentic</div>
 
         <div class="code-container">
-            <div class="code-label">CODE</div>
+            <div class="code-label" data-i18n="codeLabel">CODE</div>
             <div class="code-value" id="verifyCode">----------</div>
         </div>
 
-        <p class="hint-text">
-            This alphanumeric code must match the code and color printed on the product label.
-        </p>
+        <p class="hint-text" data-i18n="hint">This alphanumeric code must match the code and color printed on the product label.</p>
     </div>
 
-    <script>
-        // 自动从 URL 提取 code 参数，无参数时保留占位符
-        (function() {
-            const params = new URLSearchParams(window.location.search);
-            const code = params.get('code');
-            const codeEl = document.getElementById('verifyCode');
-            
-            if (code && code.trim().length > 0) {
-                codeEl.textContent = code.trim();
-            }
-        })();
-    </script>
+<script>
+// ==================== 多语言配置 ====================
+const I18N = {
+    en: {
+        label: 'ENG',
+        productName: 'T.G. 15 mg',
+        status: 'Authentic',
+        codeLabel: 'CODE',
+        hint: 'This alphanumeric code must match the code and color printed on the product label.'
+    },
+    es: {
+        label: 'SPA',
+        productName: 'T.G. 15 mg',
+        status: 'Auténtico',
+        codeLabel: 'CÓDIGO',
+        hint: 'Este código alfanumérico debe coincidir con el código y color impresos en la etiqueta del producto.'
+    },
+    pt: {
+        label: 'POR',
+        productName: 'T.G. 15 mg',
+        status: 'Autêntico',
+        codeLabel: 'CÓDIGO',
+        hint: 'Este código alfanumérico deve corresponder ao código e cor impressos no rótulo do produto.'
+    }
+};
+
+// ==================== 语言切换逻辑 ====================
+const langWrapper = document.getElementById('langWrapper');
+const langBtn = document.getElementById('langBtn');
+const currentLangEl = document.getElementById('currentLang');
+const options = document.querySelectorAll('.lang-option');
+
+// 点击按钮展开/收起
+langBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    langWrapper.classList.toggle('open');
+});
+
+// 点击页面其他区域关闭
+document.addEventListener('click', () => langWrapper.classList.remove('open'));
+
+// 选择语言
+options.forEach(opt => {
+    opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const lang = opt.dataset.lang;
+        applyLanguage(lang);
+        langWrapper.classList.remove('open');
+    });
+});
+
+function applyLanguage(lang) {
+    const data = I18N[lang];
+    if (!data) return;
+
+    // 更新按钮文字
+    currentLangEl.textContent = data.label;
+
+    // 更新所有带 data-i18n 的元素
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (data[key]) el.textContent = data[key];
+    });
+
+    // 更新选中状态高亮
+    options.forEach(o => o.classList.toggle('active', o.dataset.lang === lang));
+
+    // 记录当前语言（可选：存入 localStorage 持久化）
+    localStorage.setItem('authnow_lang', lang);
+}
+
+// ==================== 验证码提取 + 初始化 ====================
+(function init() {
+    // 读取 URL 中的 code
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const codeEl = document.getElementById('verifyCode');
+    if (code && code.trim().length > 0) {
+        codeEl.textContent = code.trim();
+    }
+
+    // 恢复上次选择的语言，默认 ENG
+    const savedLang = localStorage.getItem('authnow_lang') || 'en';
+    applyLanguage(savedLang);
+
+    // PC端检测兜底
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (!isMobile && window.innerWidth >= 768) {
+        document.querySelector('.card').style.display = 'none';
+        document.querySelector('.desktop-block').style.display = 'block';
+    }
+})();
+</script>
 </body>
 </html>
