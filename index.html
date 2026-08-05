@@ -10,134 +10,255 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            height: 100vh; width: 100vw;
-            /* 🌟 Logo 铺满全屏作为背景 */
-            background: url('logo.png') no-repeat center center;
-            background-size: cover; 
-            overflow: hidden; /* 禁止滚动 */
-            position: relative;
+            background-color: #ffffff;
+            color: #000000;
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column;
         }
 
-        /* 顶部导航栏区域 (包含左上角菜单和右上角语言) */
-        .top-bar {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 80px; /* 顶部高度 */
+        /* --- 顶部导航栏 --- */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 25px;
-            z-index: 10;
+            padding: 15px 20px;
+            background: #fff;
         }
 
-        /* 左上角汉堡菜单图标 (纯CSS绘制) */
         .menu-icon {
-            width: 30px; height: 24px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            cursor: pointer;
-        }
-        .menu-icon span {
-            display: block; width: 100%; height: 3px;
-            background-color: #333; /* 深灰色线条 */
-            border-radius: 2px;
+            width: 40px; height: 40px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        /* 🌟 右上角语言选择框 */
+        .top-logo img {
+            height: 40px;
+            display: block;
+        }
+
+        /* 语言选择框 */
         .lang-box {
-            border: 1.5px solid #333; /* 黑色细边框 */
-            background-color: transparent; /* 背景透明 */
-            color: #000; /* 黑色文字 */
+            border: 2px solid #000;
             padding: 6px 12px;
+            font-weight: bold;
             font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
+            background: transparent;
+            color: #000;
             cursor: pointer;
+            user-select: none;
         }
 
-        /* 🌟 核心验证码区域 */
-        .verify-container {
-            position: absolute;
-            bottom: 15%; /* 距离底部 15% 的位置，参考图片大概在下方 */
-            left: 0; right: 0;
-            text-align: left; /* 左对齐，参考图看起来是左侧对齐或者居中偏左 */
-            padding-left: 25px; /* 左侧留白 */
-            z-index: 10;
-        }
-
-        /* 验证码文本行 */
-        .code-line {
-            color: #000; /* 纯黑色文字 */
+        /* --- 主要内容区域 --- */
+        .main-content {
+            flex: 1;
+            padding: 0 20px;
+            overflow-y: auto;
             display: flex;
-            align-items: baseline; /* 基线对齐 */
-            gap: 10px; /* CODE: 和 验证码之间的间距 */
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* "CODE:" 标签样式 */
-        .code-label {
-            font-size: 16px; /* 较小的字号 */
-            font-weight: 500;
-            opacity: 0.8; /* 稍微淡一点点，突出后面的码 */
+        .product-title {
+            width: 100%;
+            text-align: left;
+            font-size: 20px;
+            font-weight: 800;
+            margin-top: 10px;
+            margin-bottom: 20px;
         }
 
-        /* 10位验证码样式 */
-        .code-value {
-            font-size: 32px; /* 较大的字号 */
-            font-weight: 700; /* 加粗 */
+        /* 验证状态条 */
+        .auth-card {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+        }
+
+        .auth-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .shield-icon {
+            width: 50px; height: 50px;
+        }
+
+        .auth-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-text {
+            color: #009900;
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        /* 验证码样式 */
+        .code-text {
+            color: #000;
+            font-weight: 700;
+            font-size: 18px;
             letter-spacing: 1px;
-            font-family: monospace, sans-serif; /* 使用等宽字体让验证码更清晰 */
+            margin-top: 2px;
         }
 
+        .arrow-icon {
+            font-size: 24px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .product-image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .product-image-container img {
+            max-width: 80%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .footer-desc {
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .bottom-icons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .icon-circle {
+            width: 60px; height: 60px;
+            background-color: #CFAA28;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .icon-circle svg {
+            width: 30px; height: 30px;
+            fill: #fff;
+        }
+
+        /* PC端拦截样式 */
+        .desktop-block { 
+            display: none; text-align: center; max-width: 400px; 
+            background: rgba(0,0,0,0.05); padding: 40px; border-radius: 20px;
+            margin: auto;
+        }
+        .desktop-block h2 { font-size: 20px; margin-bottom: 12px; }
+        .desktop-block p { font-size: 15px; color: #666; line-height: 1.6; }
+
+        @media screen and (min-width: 768px) {
+            .header, .main-content { display: none !important; }
+            .desktop-block { display: block !important; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 顶部栏 -->
-    <div class="top-bar">
-        <!-- 左上角菜单 -->
-        <div class="menu-icon">
-            <span></span><span></span><span></span>
+    <!-- PC端拦截 -->
+    <div class="desktop-block">
+        <h2>📱 Mobile Only Access</h2>
+        <p>Please scan the QR code directly with your smartphone camera to verify the product.</p>
+    </div>
+
+    <!-- 移动端内容 -->
+    <div class="header">
+        <div class="menu-icon">☰</div>
+        <div class="top-logo">
+            <img src="logo.png" alt="Logo">
         </div>
+        <div class="lang-box" id="langBtn">ENG</div>
+    </div>
+
+    <div class="main-content">
+        <div class="product-title">T.G. 15 mg</div>
+
+        <div class="auth-card">
+            <div class="auth-left">
+                <svg class="shield-icon" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="48" fill="#003399"/>
+                    <path d="M50 20 L75 35 L70 65 L50 85 L30 65 L25 35 Z" fill="#fff" opacity="0.2"/>
+                    <path d="M50 30 L65 40 L62 60 L50 75 L38 60 L35 40 Z" fill="#00cc66"/>
+                    <path d="M45 50 L50 55 L60 40" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="auth-text">
+                    <span class="status-text">AUTHENTIC</span>
+                    <!-- 核心：这里显示动态验证码 -->
+                    <span class="code-text">CODE: <span id="dynamicCode">LOADING...</span></span>
+                </div>
+            </div>
+            <div class="arrow-icon">›</div>
+        </div>
+
+        <div class="product-image-container">
+            <img src="product.png" alt="Product Box" onerror="this.style.display='none'">
+        </div>
+
+        <div class="footer-desc">
+            The above alphanumeric code must match in code and color with what is printed on the product label to verify its authenticity.<br><br>
+            15 mg
+        </div>
+
+        <div class="bottom-icons">
+            <div class="icon-circle">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>
+            </div>
+            <div class="icon-circle">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // 1. 自动读取 URL 中的 code 参数
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const codeEl = document.getElementById('dynamicCode');
         
-        <!-- 右上角语言框 -->
-        <div class="lang-box" onclick="toggleLang()">ENG</div>
-    </div>
-
-    <!-- 验证码区域 -->
-    <div class="verify-container">
-        <div class="code-line">
-            <span class="code-label">CODE:</span>
-            <span class="code-value" id="auth-code">LOADING...</span>
-        </div>
-    </div>
-
-    <script>
-        // 生成随机10位验证码的函数
-        function generateCode(length) {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < length; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
+        if (code && code.trim().length > 0) {
+            codeEl.textContent = code.trim().toUpperCase(); // 自动转大写，更规范
+        } else {
+            codeEl.textContent = 'INVALID LINK'; // 没带参数时显示提示
         }
+    })();
 
-        // 页面加载时生成并显示验证码
-        window.onload = function() {
-            const code = generateCode(10);
-            document.getElementById('auth-code').innerText = code;
-        };
+    // 2. 简单的语言切换逻辑（ENG/SPA/POR）
+    const langBtn = document.getElementById('langBtn');
+    const langs = ['ENG', 'SPA', 'POR'];
+    let currentLangIndex = 0;
 
-        // 简单的语言切换模拟
-        function toggleLang() {
-            const btn = document.querySelector('.lang-box');
-            if(btn.innerText === 'ENG') {
-                btn.innerText = '中文';
-                document.querySelector('.code-label').innerText = '验证码:';
-            } else {
-                btn.innerText = 'ENG';
-                document.querySelector('.code-label').innerText = 'CODE:';
-            }
-        }
-    </script>
+    langBtn.addEventListener('click', () => {
+        currentLangIndex = (currentLangIndex + 1) % langs.length;
+        langBtn.textContent = langs[currentLangIndex];
+        
+        // 这里可以扩展更多语言的文案替换
+        // 目前仅切换按钮文字，如需全文切换可补充逻辑
+    });
+</script>
 </body>
 </html>
