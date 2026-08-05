@@ -1,140 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>验证</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AuthNow - Product Verification</title>
     <style>
-        /* 完全重置，保证与图片一致 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            background: #ffffff;
-            min-height: 100dvh;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+            background-color: #F2F2F7;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 30px 20px;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .card {
+            background: #FFFFFF;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 24px;
+            padding: 40px 30px;
             text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
-        /* 主标题 —— 与图片完全一致：全大写、粗体、深灰色 */
-        .main-title {
-            font-size: 26px;
+        /* 顶部绿色对勾图标 */
+        .check-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+        }
+        .check-icon circle { fill: #34C759; }
+        .check-icon path { stroke: #FFFFFF; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        .product-name {
+            font-size: 22px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #1e293b;
-            margin-bottom: 18px;
+            color: #000000;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
         }
 
-        /* 括号内的防伪码 —— 灰色背景、圆角、等宽字体、与图片一致 */
-        .code-wrapper {
-            font-size: 18px;
-            font-weight: 500;
-            color: #475569;
-            font-family: 'Courier New', Courier, monospace;
-            background: #f8fafc;
-            padding: 10px 26px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-            border: 1px solid #e9edf2;  /* 轻微边框，和图片接近 */
-        }
-
-        /* 描述文字 */
-        .desc {
+        .auth-status {
             font-size: 15px;
-            color: #64748b;
-            max-width: 320px;
-            line-height: 1.6;
-            margin-bottom: 32px;
-            font-weight: 400;
-        }
-
-        /* Contact Us 按钮 —— 与图片一致：白色背景、灰色边框、圆角 */
-        .contact-btn {
-            display: inline-block;
-            border: 1px solid #d1d9e6;
-            background: #ffffff;
-            padding: 12px 48px;
-            border-radius: 50px;
-            color: #334155;
             font-weight: 600;
-            font-size: 16px;
-            text-decoration: none;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-            transition: background 0.15s;
-        }
-        .contact-btn:active {
-            background: #f1f5f9;
+            color: #34C759;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 30px;
         }
 
-        /* 底部小字（可保留显示码，便于核对） */
-        .footer-note {
-            margin-top: 40px;
+        /* 验证码展示区域 - 还原截图样式 */
+        .code-container {
+            background: #F9F9FB;
+            border: 1px solid #E5E5EA;
+            border-radius: 12px;
+            padding: 18px 15px;
+            margin-bottom: 20px;
+        }
+
+        .code-label {
             font-size: 12px;
-            color: #cbd5e1;
+            font-weight: 600;
+            color: #8E8E93;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
 
-        /* 错误状态 —— 保留样式，但仅改变文字颜色 */
-        .main-title.error { color: #b91c1c; }
-        .code-wrapper.error { background: #fef2f2; border-color: #fecaca; }
+        .code-value {
+            font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #000000;
+            letter-spacing: 2px;
+            word-break: break-all;
+        }
+
+        .hint-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #8E8E93;
+            padding: 0 5px;
+        }
+
+        /* 右上角 ENG 按钮还原 */
+        .lang-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #007AFF;
+            cursor: pointer;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
+    <div class="lang-btn">ENG ▾</div>
+    
+    <div class="card">
+        <!-- 绿色对勾 SVG -->
+        <svg class="check-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="32"/>
+            <path d="M20 33 L28 41 L44 25"/>
+        </svg>
 
-    <!-- 页面结构 = 完全按照图片顺序 -->
-    <div class="main-title" id="mainTitle">PRODUCT NOT RECOGNIZED</div>
-    <div class="code-wrapper" id="displayCode">(s4Hggp7myM)</div>
-    <p class="desc" id="descText">The QR code you scanned does not match any records in our database.</p>
-    <a href="#" class="contact-btn">Contact Us</a>
-    <div class="footer-note">Verification ID: <span id="footerId">--</span></div>
+        <div class="product-name">T.G. 15 mg</div>
+        <div class="auth-status">Authentic</div>
+
+        <div class="code-container">
+            <div class="code-label">CODE</div>
+            <div class="code-value" id="verifyCode">----------</div>
+        </div>
+
+        <p class="hint-text">
+            This alphanumeric code must match the code and color printed on the product label.
+        </p>
+    </div>
 
     <script>
+        // 自动从 URL 提取 code 参数，无参数时保留占位符
         (function() {
-            // 1. 获取 URL 中的 code 参数
             const params = new URLSearchParams(window.location.search);
-            let code = params.get('code');
-
-            const titleEl = document.getElementById('mainTitle');
-            const codeEl = document.getElementById('displayCode');
-            const descEl = document.getElementById('descText');
-            const footerEl = document.getElementById('footerId');
-
-            // 2. 如果没有 code，显示等待状态（保留图片样式，但文字改为提示）
-            if (!code) {
-                titleEl.textContent = 'WAITING FOR SCAN';
-                titleEl.className = 'main-title error';
-                codeEl.textContent = '(No ID)';
-                codeEl.className = 'code-wrapper error';
-                descEl.textContent = 'Please scan a valid QR code.';
-                footerEl.textContent = '--';
-                return;
-            }
-
-            // 3. 有 code，过滤特殊字符，只保留字母数字
-            code = code.replace(/[^a-zA-Z0-9]/g, '');
-
-            // 4. 检查是否为 10 位
-            if (code.length === 10) {
-                // ✅ 正品 —— 显示绿色标题，正向描述
-                titleEl.textContent = '✅ PRODUCT VERIFIED';
-                titleEl.className = 'main-title';
-                titleEl.style.color = '#16a34a';  // 绿色
-                codeEl.textContent = `(${code})`;
-                codeEl.className = 'code-wrapper';
-                descEl.textContent = 'This product is genuine. Thank you for your trust.';
-                footerEl.textContent = code;
-            } else {
-                // ❌ 码长度不对 —— 显示“未识别”，保持原图片风格
-                titleEl.textContent = 'PRODUCT NOT RECOGNIZED';
-                titleEl.className = 'main-title error';
-                titleEl.style.color = '#b91c1c';
-                codeEl.textContent = `(${code})`;
-                codeEl.className = 'code-wrapper error';
-                descEl.textContent = 'The QR code you scanned does not match any records in our database.';
-                footerEl.textContent = code + ' (长度错误)';
+            const code = params.get('code');
+            const codeEl = document.getElementById('verifyCode');
+            
+            if (code && code.trim().length > 0) {
+                codeEl.textContent = code.trim();
             }
         })();
     </script>
